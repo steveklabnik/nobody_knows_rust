@@ -294,10 +294,114 @@ impl&lt;T&gt; Seq&lt;T&gt; for ~[T] {
 }
 </code></pre>
           </section>
+          <section>
+<h1>More Traits</h1>
+<pre><code data-trim>
+extern mod active_support;
+use active_support::Period;
+use active_support::Time;
+
+fn main() {
+  let time = Time::now();
+  println!("{:?}", time);
+  println!("{:?}", 2.days().from_now());
+  println!("{:?}", 2.weeks().from_now());
+  println!("{:?}", 2.months().from_now());
+  println!("{:?}", 2.years().from_now());
+}
+</code></pre>
+          </section>
+          <section>
+<h1>More Traits</h1>
+<pre><code data-trim>
+use TimeChange;
+
+pub trait Period {
+  fn seconds(&amp;self) -&gt; TimeChange;
+  fn minutes(&amp;self) -&gt; TimeChange;
+  // ...
+}
+
+impl Period for uint {
+  fn seconds(&amp;self) -&gt; TimeChange {
+    TimeChange::new().seconds(*self as f32)
+  }
+
+  fn minutes(&amp;self) -&gt; TimeChange {
+    TimeChange::new().minutes(*self as f32)
+  }
+
+  // ...
+}
+</code></pre>
+          </section>
+          <section>
+<h1>FFI</h1>
+<pre><code data-trim>
+use std::libc::size_t;
+
+#[link(name = "snappy")]
+extern {
+    fn snappy_max_compressed_length(source_length: size_t) -&gt; size_t;
+}
+
+fn main() {
+    let x = unsafe { snappy_max_compressed_length(100) };
+    println!("max compressed length of a 100 byte buffer: {}", x);
+}
+</code></pre>
+          </section>
+          <section>
+<h1>FFI</h1>
+<pre><code data-trim>
+pub fn validate_compressed_buffer(src: &amp;[u8]) -&gt; bool {
+    unsafe {
+        snappy_validate_compressed_buffer(src.as_ptr(), src.len() as size_t) == 0
+    }
+}
+</code></pre>
+          </section>
+          <section>
+<h1>FFI</h1>
+<pre><code data-trim>
+pub fn uncompress(src: &amp;[u8]) -&gt; Option<~[u8]> {
+    unsafe {
+        let srclen = src.len() as size_t;
+        let psrc = src.as_ptr();
+
+        let mut dstlen: size_t = 0;
+        snappy_uncompressed_length(psrc, srclen, &amp;mut dstlen);
+
+        let mut dst = vec::with_capacity(dstlen as uint);
+        let pdst = dst.as_mut_ptr();
+
+        if snappy_uncompress(psrc, srclen, pdst, &amp;mut dstlen) == 0 {
+            dst.set_len(dstlen as uint);
+            Some(dst)
+        } else {
+            None // SNAPPY_INVALID_INPUT
+        }
+    }
+}
+</code></pre>
+          </section>
 				</section>
 				<section>
           <section>
             <h1>Learning more</h1>
+          </section>
+
+          <section>
+            <h1>Awesome projects</h1>
+            <ul>
+              <li>charliesome/rustboot</li>
+              <li>chris-morgan/rust-http</li>
+              <li>thestinger/rust-core</li>
+              <li>pcwalton/sprocketnes</li>
+              <li>williamw520/rustymem</li>
+              <li>mneumann/{rust-redis,rust-msgpack}</li>
+              <li>lifthrasiir/angolmois-rust</li>
+            </ul>
           </section>
 
           <section>
