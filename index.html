@@ -4,7 +4,7 @@
 	<head>
 		<meta charset="utf-8">
 
-		<title>Nobody Knows Rust</title>
+		<title>Rust for $LANGUAGE-ists</title>
 
 		<meta name="description" content="A talk, about Rust.">
 		<meta name="author" content="Steve Klabnik">
@@ -37,16 +37,10 @@
 			<!-- Any section element inside of this container is displayed as a slide -->
 			<div class="slides">
 				<section>
-					<h1>Nobody<br />Knows Rust</h1>
+          <h1>Rust for $LANGUAGE-ists</h1>
 					<p>
           By <a href="http://steveklabnik.com">Steve Klabnik</a>
 					</p>
-				</section>
-
-				<section>
-          <h1>Rust!!!!!!111</h1>
-          <p>Rust is a really interesting new programming language.</p>
-          <p>Rust is a good choice when you'd choose C++. And maybe other times.</p>
 				</section>
 
 				<section>
@@ -55,27 +49,22 @@
           </section>
 
           <section>
+            <h1>Rust!!!!!!111</h1>
+            <p>Rust is a really interesting new programming language.</p>
+            <p>Rust is a good choice when you'd choose C++. And maybe other times.</p>
+            <p>"Rust is a systems language pursuing the trifecta:</br> safe, concurrent, and fast."</p>
+            <p>Rust is an ownership-oriented programming language.</p>
+          </section>
+
+
+          <section>
             <h1>Origins</h1>
             <p>Rust was written by Graydon Hoare. Mozilla has taken stewardship.</p>
             <p>Mozilla writes lots of C++, and feels that pain.</p>
           </section>
-
-          <section>
-            <h1>Usage for Rust</h1>
-            <p>Rust is written in Rust.</p>
-            <p>Mozilla is developing Servo in Rust as well.</p>
-          </section>
-
-          <section>
-            <h1>Servo</h1>
-            <p>Servo is a web rendering engine. Think Gecko or WebKit.</p>
-            <p>There are no plans to replace Gecko. It is focused on mobile.</p>
-            <p><strong>Massively</strong> paralell.</p>
-          </section>
-
           <section>
             <h1>Stability</h1>
-            <p>Rust is currently at version 0.8.</p>
+            <p>Rust is currently at version 0.9.</p>
             <p>Snapshots, not backwards compatible.</p>
             <p>1.0 is coming soon.</p>
           </section>
@@ -83,67 +72,45 @@
 
 				<section>
           <section>
-            <h1>The ten gifts <br />of #rustlang.</h1>
+          <h1>Some code</h1>
           </section>
-          <section>
-            <h1>Functions</h1>
-<p><code><pre>
-fn main() {
-    println("Hello, world!");
-}
-</pre></code></p>
-          </section>
-          <section>
-            <h1>Variables</h1>
-<p><code><pre>
-fn main() {
-    let num = 1;
-}
-</pre></code></p>
-          </section>
-          <section>
-            <h1>Vectors</h1>
-<p><code><pre>
-fn main() {
-    let nums = [1, 2];
-    let noms = ["Tim", "Eston", "Aaron", "Ben"];
-}
-</pre></code></p>
-          </section>
-          <section>
-            <h1>Mutation</h1>
-<p><code><pre>
-fn main() {
-    let nums = [1, 2];
-    let noms = ["Tim", "Eston", "Aaron", "Ben"];
 
-    let mut odds = [3, 5, 7];
+          <section>
+          <h2>Segfaults</h2>
+<pre><code data-trim>
+int main(void)
+{
+     char *s = "hello world";
+     *s = 'H';
 }
-</pre></code></p>
+</code></pre>
           </section>
           <section>
-            <h1>Closures</h1>
-<p><code><pre>
+          <h2>Segfaults</h2>
+<pre><code data-trim>
 fn main() {
-    let double = |x: int| -&gt; int { x * 2 };
-    let x = double(5);
+    let s = &amp;"hello world";
+    *s = "H";
 }
-</pre></code></p>
+
+segfault.rs:3:4: 3:6 error: type &amp;str cannot be dereferenced
+segfault.rs:3     *s = "H";
+                  ^~
+error: aborting due to previous error
+task 'rustc' failed at 'explicit failure', ...
+</code></pre>
           </section>
           <section>
-            <h1>Iteration</h1>
-<p><code><pre>
+          <h1>Hello world</h1>
+<pre><code data-trim>
 fn main() {
-    let nums = [1, 2];
-    let noms = ["Tim", "Eston", "Aaron", "Ben"];
- 
-    let mut odds = nums.iter().map(|&amp;x| x * 2 - 1);
+  println("Hello, world");
 }
-</pre></code></p>
+</code></pre>
           </section>
           <section>
-            <h1>Tasks</h1>
-<p><code><pre>
+          <h1>A little more complex</h1>
+<pre><code data-trim>
 fn main() {
     let nums = [1, 2];
     let noms = ["Tim", "Eston", "Aaron", "Ben"];
@@ -152,129 +119,182 @@ fn main() {
  
     for num in odds {
         do spawn {
-            println("{:s} says hello from a lightweight thread!", noms[num]);
+            println!("{:s} says hello from a lightweight thread!", noms[num]);
         }
     }
 }
-</pre></code></p>
+</code></pre>
           </section>
           <section>
-            <h1>Tasks, part two</h1>
-<p><code><pre>
+            <h1>References</h1>
+<pre><code data-trim>
+fn plus_one(x: &amp;int) -&gt; int {
+    *x + 1
+}
+
 fn main() {
-    let (port, chan): (Port&lt;int&gt;, Chan&lt;int&gt;) = stream();
+    println(plus_one(&amp;5).to_str());
+}
+
+</code></pre>
+          </section>
+          <section>
+            <h1>Boxes</h1>
+<pre><code data-trim>
+fn plus_one(x: &amp;int) -&gt; int {
+    *x + 1
+}
+
+fn main() {
+    let x = ~5;
+    println(plus_one(x).to_str());
+}
+</code></pre>
+          </section>
+          <section>
+            <h1>Tasks</h1>
+<pre><code data-trim>
+fn main() {
+    let (port, chan): (Port&lt;int&gt;, Chan&lt;int&gt;) = Chan::new();
 
     do spawn || {
-        let result = some_expensive_computation();
+        let result = 5;
         chan.send(result);
     }
 
-    some_other_expensive_computation();
     let result = port.recv();
+    println!("{:d}", result);
 }
-</pre></code></p>
+</code></pre>
           </section>
           <section>
-            <h1>Generics</h1>
-<p><code><pre>
-fn map&lt;T, U&gt;(vector: &amp;[T], function: &amp;fn(v: &amp;T) -&gt; U) -&gt; ~[U] {
+            <h1>Tasks & safety</h1>
+<pre><code data-trim>
+fn main() {
+    let (port, chan): (Port&lt;int&gt;, Chan&lt;int&gt;) = Chan::new();
+    let x = ~5;
+
+    do spawn || {
+        let result = 5 + *x;
+        chan.send(result);
+    }
+
+    let result = port.recv();
+    println!("{:d}", result);
+}
+</code></pre>
+          </section>
+          <section>
+            <h1>Tasks & safety</h1>
+<pre><code data-trim>
+fn main() {
+    let (port, chan): (Port&lt;int&gt;, Chan&lt;int&gt;) = Chan::new();
+    let x = ~5;
+
+    do spawn || {
+        let result = 5 + *x;
+        chan.send(result);
+    }
+
+    *x += 1;
+
+    let result = port.recv();
+    println!("{:d}", result);
+}
+</code></pre>
+          </section>
+          <section>
+            <h1>Tasks & safety</h1>
+<pre><code data-trim>
+segfault.rs:10:5: 10:6 error: use of moved value: `x`
+segfault.rs:10     *x += 1;
+                    ^
+segfault.rs:5:7: 8:5 note: `x` moved into closure
+environment here because it has type `proc:Send()`,
+which is non-copyable (perhaps you meant to use clone()?)
+segfault.rs:5     do spawn || {
+segfault.rs:6         let result = 5 + *x;
+segfault.rs:7         chan.send(result);
+segfault.rs:8     }
+segfault.rs:10:4: 10:6 error: cannot assign to immutable dereference of ~ pointer
+segfault.rs:10     *x += 1;
+                   ^~
+error: aborting due to 2 previous errors
+</code></pre>
+          </section>
+          <section>
+<h1>Pattern Matching</h1>
+<pre><code data-trim>
+match my_number {
+  0     =&gt; println("zero"),
+  1 | 2 =&gt; println("one or two"),
+  3..10 =&gt; println("three to ten"),
+  _     =&gt; println("something else")
+}
+</code></pre>
+          </section>
+          <section>
+<h1>Option and<br />pattern matching</h1>
+<pre><code data-trim>
+let msg = Some(~"howdy");
+
+// Take a reference to the contained string
+match msg {
+    Some(ref m) =&gt; io::println(*m),
+    None =&gt; ()
+}
+</code></pre>
+          </section>
+          <section>
+<h1>Closures</h1>
+<pre><code data-trim>
+let square = |x: int| -&gt; uint { (x * x) as uint };
+
+let mut max = 0;
+[1, 2, 3].map(|x| if *x &gt; max { max = *x });
+</code></pre>
+          </section>
+          <section>
+<h1>Generics</h1>
+<pre><code data-trim>
+fn map&lt;T, U&gt;(vector: &amp;[T], function: |v: &amp;T| -&gt; U) -&gt; ~[U] {
     let mut accumulator = ~[];
     for element in vector.iter() {
         accumulator.push(function(element));
     }
     return accumulator;
 }
-</pre></code></p>
+</code></pre>
           </section>
           <section>
-            <h1>Traits</h1>
-<p><code><pre>
-fn main() {
-    let x = 5;
-    display(x);
-
-    let y = "Hello";
-    display(y);
+<h1>Structs and traits</h1>
+<pre><code data-trim>
+struct TimeBomb {
+    explosivity: uint
 }
 
-fn display&lt;T: ToStr&gt;(x: T) {
-    println(x.to_str());
-}
-</pre></code></p>
-          </section>
-          <section>
-            <h1>Pointers</h1>
-<p><code><pre>
-fn main() {
-    let x: ~int = ~5;
-    println((*x + 5).to_str());
-}
-</pre></code></p>
-          </section>
-          <section>
-            <h1>Pointers, part 2</h1>
-<p><code><pre>
-fn main() {
-    let x = ~5;
-    do spawn {
-        println!("{:i}", *x);
-    }
-
-    println!("{:i}", *x);
-}
-rust.rs:7:22: 7:23 error: use of moved value: `x`
-rust.rs:7     println!("{:i}", *x);
-                                ^
-rust.rs:3:7: 5:5 note: `x` moved into closure environment here because it has type 
-`~fn:Send()`, which is non-copyable (perhaps you meant to use clone()?)
-error: aborting due to previous error
-</pre></code></p>
-          </section>
-          <section>
-            <h3>Tasks and ARC</h3>
-<p><code><pre>
-use extra::arc::Arc;
-
-fn pnorm(nums: &amp;~[f64], p: uint) -&gt; f64 {
-    nums.iter().fold(0.0, |a,b| a+(*b).pow(&amp;(p as f64)) ).pow(&amp;(1.0 / (p as f64)))
-}
-
-fn main() {
-    let numbers = vec::from_fn(1000000, |_| rand::random::&lt;f64&gt;());
-    println!("Inf-norm = {}",  *numbers.iter().max().unwrap());
-
-    let numbers_arc = Arc::new(numbers);
-
-    for num in range(1u, 10) {
-        let (port, chan)  = stream();
-        chan.send(numbers_arc.clone());
-
-        do spawn {
-            let local_arc : Arc&lt;~[f64]&gt; = port.recv();
-            let task_numbers = local_arc.get();
-            println!("{}-norm = {}", num, pnorm(task_numbers, num));
+impl Drop for TimeBomb {
+    fn drop(&amp;mut self) {
+        for _ in range(0, self.explosivity) {
+            println("blam!");
         }
     }
 }
-</pre></code></p>
+</code></pre>
           </section>
           <section>
-            <h1>Bonus! Match</h1>
-<p><code><pre>
-use std::io;
-
-fn main() {
-    let input = io::stdin().read_line();
-
-    match from_str::&lt;int&gt;(input) {
-        Some(number_string) =&gt; println(number_string.to_str()),
-        None                =&gt; println("Hey, put in a number.")
-    }
+<h1>Traits and<br /> parameterization</h1>
+<pre><code data-trim>
+trait Seq&lt;T&gt; {
+    fn length(&amp;self) -&gt; uint;
 }
-</pre></code></p>
+
+impl&lt;T&gt; Seq&lt;T&gt; for ~[T] {
+    fn length(&amp;self) -&gt; uint { self.len() }
+}
+</code></pre>
           </section>
 				</section>
-
 				<section>
           <section>
             <h1>Learning more</h1>
@@ -285,6 +305,7 @@ fn main() {
             <ul>
               <li>The official tutorial</li>
               <li>Rust for Rubyists</li>
+              <li>Rust Tutorials_NG</li>
             </ul>
           </section>
           <section>
