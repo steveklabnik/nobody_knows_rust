@@ -68,7 +68,7 @@
           </section>
           <section>
             <h1>Stability</h1>
-            <p>Rust is currently at version 0.9.</p>
+            <p>Rust is currently at version 0.10.</p>
             <p>Snapshots, not backwards compatible.</p>
             <p>1.0 is coming soon.</p>
           </section>
@@ -107,6 +107,8 @@ task 'rustc' failed at 'explicit failure', ...
           <section>
           <h1>Hello world</h1>
 <pre><code data-trim>
+use std::io::println;
+
 fn main() {
   println("Hello, world");
 }
@@ -122,9 +124,9 @@ fn main() {
     let mut odds = nums.iter().map(|&amp;x| x * 2 - 1);
  
     for num in odds {
-        do spawn {
+        spawn(proc() {
             println!("{:s} says hello from a lightweight thread!", noms[num]);
-        }
+        });
     }
 }
 </code></pre>
@@ -137,7 +139,7 @@ fn plus_one(x: &amp;int) -&gt; int {
 }
 
 fn main() {
-    println(plus_one(&amp;5).to_str());
+    println!("{}", plus_one(&amp;5));
 }
 
 </code></pre>
@@ -151,7 +153,7 @@ fn plus_one(x: &amp;int) -&gt; int {
 
 fn main() {
     let x = ~5;
-    println(plus_one(x).to_str());
+    println!("{}", plus_one(x));
 }
 </code></pre>
           </section>
@@ -159,12 +161,12 @@ fn main() {
             <h1>Tasks</h1>
 <pre><code data-trim>
 fn main() {
-    let (port, chan): (Port&lt;int&gt;, Chan&lt;int&gt;) = Chan::new();
+    let (chan, port) = channel();
 
-    do spawn || {
+    spawn(proc() {
         let result = 5;
         chan.send(result);
-    }
+    });
 
     let result = port.recv();
     println!("{:d}", result);
@@ -175,13 +177,13 @@ fn main() {
             <h1>Tasks & safety</h1>
 <pre><code data-trim>
 fn main() {
-    let (port, chan): (Port&lt;int&gt;, Chan&lt;int&gt;) = Chan::new();
+    let (chan, port) = channel();
     let x = ~5;
 
-    do spawn || {
+    spawn(proc() {
         let result = 5 + *x;
         chan.send(result);
-    }
+    });
 
     let result = port.recv();
     println!("{:d}", result);
@@ -192,13 +194,13 @@ fn main() {
             <h1>Tasks & safety</h1>
 <pre><code data-trim>
 fn main() {
-    let (port, chan): (Port&lt;int&gt;, Chan&lt;int&gt;) = Chan::new();
+    let (chan, port) = channel();
     let x = ~5;
 
-    do spawn || {
+    spawn(proc() {
         let result = 5 + *x;
         chan.send(result);
-    }
+    });
 
     *x += 1;
 
