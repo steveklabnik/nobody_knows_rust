@@ -303,7 +303,7 @@ trait Seq&lt;T&gt; {
     fn length(&amp;self) -&gt; uint;
 }
 
-impl&lt;T&gt; Seq&lt;T&gt; for Vec<T> {
+impl&lt;T&gt; Seq&lt;T&gt; for Vec&lt;T&gt; {
     fn length(&amp;self) -&gt; u32 { self.len() }
 }
             </code></pre>
